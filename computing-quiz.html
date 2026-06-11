@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computing Fundamentals Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple-50: #EEEDFE;
+    --purple-200: #AFA9EC;
+    --purple-500: #534AB7;
+    --purple-700: #3C3489;
+    --purple-900: #26215C;
+    --green-50: #EAF3DE;
+    --green-600: #3B6D11;
+    --green-800: #27500A;
+    --red-50: #FCEBEB;
+    --red-600: #A32D2D;
+    --amber-50: #FAEEDA;
+    --amber-700: #854F0B;
+    --teal-50: #E1F5EE;
+    --teal-700: #0F6E56;
+    --bg: #0E0C1E;
+    --surface: #171530;
+    --surface2: #1F1C3A;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #F0EFF8;
+    --text-2: #9E9BBE;
+    --text-3: #635F85;
+    --accent: #7B73E8;
+    --accent-dim: rgba(123,115,232,0.15);
+    --accent-glow: rgba(123,115,232,0.3);
+    --correct: #5CB85C;
+    --correct-bg: rgba(92,184,92,0.12);
+    --correct-border: rgba(92,184,92,0.35);
+    --wrong: #E0604E;
+    --wrong-bg: rgba(224,96,78,0.12);
+    --wrong-border: rgba(224,96,78,0.35);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-pill: 99px;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(123,115,232,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(123,115,232,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(14,12,30,0.7);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-logo-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+  }
+  .nav-badge {
+    font-size: 12px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid rgba(123,115,232,0.3);
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+  }
+
+  /* MAIN CONTAINER */
+  .main {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+  }
+  .container { width: 100%; max-width: 640px; }
+
+  /* SCREENS */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 1rem;
+  }
+  .card-hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2.5rem 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  /* TYPOGRAPHY */
+  h1 { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+  h2 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; color: var(--text); margin-bottom: 1rem; }
+  h3 { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 0.75rem; }
+  p { font-size: 15px; color: var(--text-2); line-height: 1.7; }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 11px 22px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    text-decoration: none;
+  }
+  .btn:hover { background: var(--surface2); border-color: rgba(255,255,255,0.2); }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 20px var(--accent-glow);
+  }
+  .btn-primary:hover { background: #6A63D0; border-color: #6A63D0; }
+  .btn-sm { padding: 8px 15px; font-size: 13px; }
+  .btn-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 1.5rem; }
+
+  /* INPUT */
+  .input-wrap {
+    display: flex; gap: 10px; margin-top: 1.5rem;
+  }
+  input[type="text"] {
+    flex: 1;
+    padding: 11px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input[type="text"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+  }
+  input[type="text"]::placeholder { color: var(--text-3); }
+
+  /* PILLS / TAGS */
+  .tag {
+    display: inline-block;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    font-weight: 500;
+  }
+  .tag-purple { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(123,115,232,0.25); }
+  .tag-green { background: var(--correct-bg); color: var(--correct); border: 1px solid var(--correct-border); }
+  .tag-amber { background: rgba(239,159,39,0.12); color: #EF9F27; border: 1px solid rgba(239,159,39,0.3); }
+  .tag-teal { background: rgba(29,158,117,0.12); color: #1D9E75; border: 1px solid rgba(29,158,117,0.25); }
+
+  .tag-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 1.25rem 0; }
+
+  /* PROGRESS */
+  .progress-wrap { margin-bottom: 1.5rem; }
+  .progress-meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-2); margin-bottom: 6px; }
+  .progress-bg { background: var(--surface2); border-radius: var(--radius-pill); height: 5px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: var(--radius-pill); transition: width 0.5s ease; box-shadow: 0 0 8px var(--accent-glow); }
+
+  /* QUESTION */
+  .lesson-tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(123,115,232,0.25); padding: 3px 10px; border-radius: var(--radius-pill); margin-bottom: 1rem; }
+  .q-text { font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 600; color: var(--text); line-height: 1.45; margin-bottom: 1.5rem; }
+
+  /* OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    display: flex; align-items: flex-start; gap: 12px;
+    width: 100%;
+    padding: 13px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    text-align: left;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  }
+  .opt:hover:not(:disabled) { background: rgba(123,115,232,0.08); border-color: rgba(123,115,232,0.3); }
+  .opt:active:not(:disabled) { transform: scale(0.99); }
+  .opt-letter {
+    width: 26px; height: 26px; flex-shrink: 0;
+    border-radius: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: var(--text-2);
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .opt-text { padding-top: 1px; line-height: 1.5; }
+  .opt.selected-correct { background: var(--correct-bg); border-color: var(--correct-border); color: var(--text); }
+  .opt.selected-correct .opt-letter { background: var(--correct); border-color: var(--correct); color: #fff; }
+  .opt.selected-wrong { background: var(--wrong-bg); border-color: var(--wrong-border); color: var(--text); }
+  .opt.selected-wrong .opt-letter { background: var(--wrong); border-color: var(--wrong); color: #fff; }
+  .opt.reveal-correct { background: var(--correct-bg); border-color: var(--correct-border); }
+  .opt.reveal-correct .opt-letter { background: var(--correct); border-color: var(--correct); color: #fff; }
+  .opt:disabled { cursor: default; }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 1rem; padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    display: none;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--correct-bg); border: 1px solid var(--correct-border); color: #8DE88D; }
+  .feedback.wrong { background: var(--wrong-bg); border: 1px solid var(--wrong-border); color: #F09898; }
+  .feedback svg { flex-shrink: 0; margin-top: 1px; }
+  .feedback strong { color: var(--text); }
+
+  /* NEXT BUTTON ROW */
+  .quiz-footer { display: flex; justify-content: flex-end; margin-top: 0.75rem; }
+
+  /* SCORE / RESULTS */
+  .score-huge {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 64px; font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin: 0.5rem 0 0.25rem;
+    letter-spacing: -2px;
+  }
+  .score-frac { font-size: 15px; color: var(--text-2); margin-bottom: 1.75rem; }
+  .stat-row { display: flex; gap: 12px; margin-bottom: 1.75rem; }
+  .stat {
+    flex: 1; background: var(--surface2); border-radius: var(--radius-sm);
+    padding: 1rem; text-align: center;
+    border: 1px solid var(--border);
+  }
+  .stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; color: var(--text); }
+  .stat-lbl { font-size: 12px; color: var(--text-3); margin-top: 2px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-3); margin-bottom: 0.75rem; margin-top: 1.5rem;
+  }
+
+  /* LEADERBOARD */
+  .lb-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-rank { width: 28px; font-size: 18px; }
+  .lb-name { flex: 1; font-weight: 500; color: var(--text); }
+  .lb-score { font-weight: 600; color: var(--accent); font-family: 'Space Grotesk', sans-serif; }
+  .lb-bar-wrap { width: 80px; height: 4px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
+  .lb-bar { height: 100%; background: var(--accent); border-radius: 99px; }
+
+  /* REVIEW */
+  .tab-row { display: flex; gap: 6px; margin-bottom: 1.25rem; }
+  .tab {
+    padding: 8px 16px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border2);
+    background: transparent; color: var(--text-2);
+    font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .tab:hover:not(.active) { background: var(--surface2); }
+
+  .review-item {
+    border: 1px solid var(--border);
+    border-left-width: 3px;
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    transition: opacity 0.2s;
+  }
+  .review-item.correct { border-left-color: var(--correct); }
+  .review-item.wrong { border-left-color: var(--wrong); }
+  .review-q { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 8px; line-height: 1.4; }
+  .review-ans { font-size: 13px; display: flex; align-items: flex-start; gap: 6px; line-height: 1.4; margin-top: 4px; }
+  .review-correct { color: var(--correct); }
+  .review-wrong { color: var(--wrong); text-decoration: line-through; opacity: 0.8; }
+
+  /* REVIEW HEADER */
+  .review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
+  .review-header h2 { margin: 0; }
+
+  /* HERO ICON */
+  .hero-icon {
+    width: 64px; height: 64px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(123,115,232,0.3);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.25rem;
+    font-size: 28px;
+  }
+
+  /* SCORE ICON */
+  .result-emoji { font-size: 48px; margin-bottom: 0.5rem; display: block; }
+
+  /* ERROR */
+  .error-msg { font-size: 13px; color: var(--wrong); margin-top: 8px; display: none; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .fade-up { animation: fadeUp 0.3s ease both; }
+
+  @keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)} }
+  .shake { animation: shake 0.35s ease; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 99px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 560px) {
+    nav { padding: 1rem; }
+    .main { padding: 1.5rem 0.75rem; }
+    .card, .card-hero { padding: 1.5rem 1.25rem; }
+    .q-text { font-size: 17px; }
+    .score-huge { font-size: 52px; }
+    .stat-row { gap: 8px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <nav>
+    <div class="nav-logo">
+      <div class="nav-logo-dot"></div>
+      CompQuiz
+    </div>
+    <span class="nav-badge">GCSE Computing</span>
+  </nav>
+
+  <main class="main">
+    <div class="container">
+
+      <!-- HOME SCREEN -->
+      <div id="screen-home" class="screen active">
+        <div class="card-hero fade-up">
+          <div class="hero-icon">🖥️</div>
+          <h1>Computing fundamentals</h1>
+          <p style="max-width:400px;margin:0.5rem auto 0;">Test your knowledge across computational thinking, software development, and algorithms.</p>
+          <div class="tag-row">
+            <span class="tag tag-purple">30 questions</span>
+            <span class="tag tag-green">3 lessons</span>
+            <span class="tag tag-amber">Multiple choice</span>
+          </div>
+          <div class="input-wrap">
+            <input type="text" id="student-name" placeholder="Enter your name to begin…" maxlength="30" />
+            <button class="btn btn-primary" onclick="startQuiz()">
+              Start
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+          <p class="error-msg" id="name-error">Please enter your name first.</p>
+        </div>
+
+        <div id="lb-section" style="display:none;">
+          <div class="section-label">Leaderboard</div>
+          <div class="card" id="lb-list"></div>
+        </div>
+      </div>
+
+      <!-- QUIZ SCREEN -->
+      <div id="screen-quiz" class="screen">
+        <div class="progress-wrap">
+          <div class="progress-meta">
+            <span id="q-counter" style="font-weight:500;"></span>
+            <span id="score-live" style="color:var(--accent);font-weight:600;font-family:'Space Grotesk',sans-serif;"></span>
+          </div>
+          <div class="progress-bg"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+        </div>
+
+        <div class="card fade-up" id="question-card">
+          <div class="lesson-tag" id="lesson-tag"></div>
+          <div class="q-text" id="q-text"></div>
+          <div class="options" id="options"></div>
+          <div class="feedback" id="feedback">
+            <svg id="fb-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"></svg>
+            <span id="fb-text"></span>
+          </div>
+        </div>
+
+        <div class="quiz-footer">
+          <button class="btn btn-primary" id="next-btn" style="display:none;" onclick="nextQuestion()">
+            Next
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- RESULTS SCREEN -->
+      <div id="screen-results" class="screen">
+        <div class="card-hero fade-up" style="text-align:center;">
+          <span class="result-emoji" id="result-emoji"></span>
+          <p style="font-size:14px;color:var(--text-2);margin-bottom:0.25rem;">Well done,</p>
+          <h2 id="result-name" style="margin-bottom:0;"></h2>
+          <div class="score-huge" id="score-pct"></div>
+          <p class="score-frac" id="score-frac"></p>
+          <div class="stat-row">
+            <div class="stat"><div class="stat-num" id="r-correct" style="color:var(--correct);"></div><div class="stat-lbl">Correct</div></div>
+            <div class="stat"><div class="stat-num" id="r-wrong" style="color:var(--wrong);"></div><div class="stat-lbl">Wrong</div></div>
+            <div class="stat"><div class="stat-num" id="r-time"></div><div class="stat-lbl">Time</div></div>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-primary" onclick="showReview()">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+              Review answers
+            </button>
+            <button class="btn" onclick="retakeQuiz()">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Try again
+            </button>
+            <button class="btn" onclick="goHome()">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+              Home
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- REVIEW SCREEN -->
+      <div id="screen-review" class="screen">
+        <div class="review-header">
+          <button class="btn btn-sm" onclick="backToResults()">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            Back
+          </button>
+          <h2>Answer review</h2>
+        </div>
+        <div class="tab-row">
+          <button class="tab active" id="tab-all" onclick="setReviewTab('all')">All questions</button>
+          <button class="tab" id="tab-wrong" onclick="setReviewTab('wrong')">Wrong only</button>
+          <button class="tab" id="tab-correct" onclick="setReviewTab('correct')">Correct only</button>
+        </div>
+        <div id="review-list"></div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+const QUESTIONS = [
+  { lesson:"Lesson 1", q:"What is computing?", opts:["The process of writing instructions for humans","The performing of calculations or processing of data, especially using a computer","The study of mathematics","Designing hardware components"], ans:1 },
+  { lesson:"Lesson 1", q:"How is 'computational thinking' best defined?", opts:["Writing code in a programming language","Using a computer to solve maths problems","Analyzing problems and identifying possible solutions using structured techniques","Building computer hardware"], ans:2 },
+  { lesson:"Lesson 1", q:"Which four techniques are used in computational thinking?", opts:["Loops, conditions, variables, and functions","Pattern recognition, abstraction, decomposition, and algorithms","Analysis, design, testing, and enhancement","Input, output, process, and storage"], ans:1 },
+  { lesson:"Lesson 1", q:"Which technique involves finding repeated designs or features in a problem?", opts:["Abstraction","Decomposition","Algorithms","Pattern recognition"], ans:3 },
+  { lesson:"Lesson 1", q:"What is abstraction in computational thinking?", opts:["Breaking a problem into smaller parts","Writing step-by-step instructions","Extracting the most important features while filtering out unnecessary details","Finding repeated patterns in data"], ans:2 },
+  { lesson:"Lesson 1", q:"You ignore a washing machine's colour to focus on its water temperature. Which technique is this?", opts:["Decomposition","Pattern recognition","Algorithm design","Abstraction"], ans:3 },
+  { lesson:"Lesson 1", q:"What is decomposition?", opts:["Extracting the most important features from a problem","Breaking a complex problem into smaller, simpler problems","Finding patterns in a problem","Testing a solution to check it works"], ans:1 },
+  { lesson:"Lesson 1", q:"Breaking a music festival into venue, publicity, and tickets is an example of which technique?", opts:["Abstraction","Pattern recognition","Decomposition","Algorithm design"], ans:2 },
+  { lesson:"Lesson 1", q:"What is an algorithm?", opts:["A type of computer language","An organised set of instructions that provides steps for solving a problem","A method for finding patterns","A way of breaking down complex problems"], ans:1 },
+  { lesson:"Lesson 1", q:"What is the process of validating a design to check it does what it is meant to do?", opts:["Decomposition","Abstraction","Evaluation","Generalisation"], ans:2 },
+  { lesson:"Lesson 1", q:"Adapting a washing machine to run on both 110V and 220V is an example of what?", opts:["Decomposition","Abstraction","Evaluation","Generalisation"], ans:3 },
+  { lesson:"Lesson 2", q:"Why are natural languages sometimes difficult for computers to understand?", opts:["They use too many characters","They are not spoken aloud","They need context to avoid ambiguity","They change too frequently"], ans:2 },
+  { lesson:"Lesson 2", q:"What are the characteristics of a formal language?", opts:["Flexible, creative, and expressive","Strictly structured, clear, unambiguous, and precise","Simple and easy to learn","Context-dependent and conversational"], ans:1 },
+  { lesson:"Lesson 2", q:"What punctuation groups words and defines order in formal languages?", opts:["Quotation marks","Colons","Full stops","Brackets (parentheses)"], ans:3 },
+  { lesson:"Lesson 2", q:"What is source code?", opts:["A series of 1s and 0s the computer can execute","Instructions written by a programmer in a human-readable way","The final compiled version of a program","A type of machine language"], ans:1 },
+  { lesson:"Lesson 2", q:"What is machine code?", opts:["Code written in a high-level language","Instructions stored in a database","A series of 1s and 0s that the computer's circuits can understand","Source code before it is tested"], ans:2 },
+  { lesson:"Lesson 2", q:"What must happen to source code before a computer can obey it?", opts:["It must be printed out","It must be evaluated","It must be converted into machine code","It must be decomposed"], ans:2 },
+  { lesson:"Lesson 2", q:"What is the difference between a program description and a specification?", opts:["They are the same thing","A description is more detailed than a specification","A description is general; a specification is detailed with testable requirements","A specification is written by the user"], ans:2 },
+  { lesson:"Lesson 2", q:"What are the five stages of developing a program?", opts:["Plan, write, run, fix, release","Analysis, design, programming, testing, and enhancement","Define, code, compile, debug, deploy","Input, process, output, store, evaluate"], ans:1 },
+  { lesson:"Lesson 2", q:"Which development stage involves decomposition and planning algorithms?", opts:["Analysis","Programming","Testing","Design"], ans:3 },
+  { lesson:"Lesson 2", q:"Which stage involves checking the program does what it was intended to do?", opts:["Design","Enhancement","Testing","Programming"], ans:2 },
+  { lesson:"Lesson 3", q:"What is a sequence in programming?", opts:["A loop that repeats instructions","A decision that branches the program","Simple instructions carried out one after another in order","A set of variables stored in memory"], ans:2 },
+  { lesson:"Lesson 3", q:"What is a value from outside the computer (like a temperature reading) called?", opts:["Output","Variable","Process","Input"], ans:3 },
+  { lesson:"Lesson 3", q:"What do we call an action performed by a program, like displaying a message?", opts:["Input","Variable","Output","Sequence"], ans:2 },
+  { lesson:"Lesson 3", q:"What is a flowchart?", opts:["A type of pseudocode","A pictorial way of representing an algorithm using shaped boxes","A list of variables used in a program","A natural language description of an algorithm"], ans:1 },
+  { lesson:"Lesson 3", q:"In a flowchart, what does a diamond shape represent?", opts:["A process","The start or end","An input or output","A decision (yes/no question)"], ans:3 },
+  { lesson:"Lesson 3", q:"In a flowchart, what does a rectangle represent?", opts:["A decision","A process (a simple instruction)","The start or end","An input"], ans:1 },
+  { lesson:"Lesson 3", q:"What is pseudocode?", opts:["Compiled code ready to run on a computer","A flowchart drawn on paper","An informal way of representing an algorithm in natural language for humans to read","A strict formal language with exact rules"], ans:2 },
+  { lesson:"Lesson 3", q:"If an algorithm says 'Put cake in oven' before 'Mix ingredients', what error is this?", opts:["Incorrect decision outcome","Missing output","Incorrect sequence","Wrong variable name"], ans:2 },
+  { lesson:"Lesson 3", q:"If an algorithm checks if a cake is baked but forgets to say 'take it out if yes', what error is this?", opts:["Incorrect sequence","Incorrect decision outcome","Missing input","Algorithm overflow"], ans:1 },
+];
+
+let currentQ=0, score=0, answers=[], startTime, elapsed=0, timerRef;
+let studentName='';
+
+function pad(n){ return String(n).padStart(2,'0'); }
+function fmtTime(s){ return `${pad(Math.floor(s/60))}:${pad(s%60)}`; }
+function esc(s){ return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function loadScores(){
+  try{ return JSON.parse(localStorage.getItem('cq_scores2')||'[]'); }catch(e){ return []; }
+}
+function saveScore(name, pct){
+  const arr = loadScores();
+  arr.push({name, pct, ts: Date.now()});
+  arr.sort((a,b)=>b.pct-a.pct);
+  localStorage.setItem('cq_scores2', JSON.stringify(arr.slice(0,10)));
+}
+
+function renderLeaderboard(){
+  const arr = loadScores();
+  const sec = document.getElementById('lb-section');
+  if(!arr.length){ sec.style.display='none'; return; }
+  sec.style.display='block';
+  const medals=['🥇','🥈','🥉'];
+  document.getElementById('lb-list').innerHTML = arr.slice(0,7).map((s,i)=>`
+    <div class="lb-row">
+      <span class="lb-rank">${medals[i]||`#${i+1}`}</span>
+      <span class="lb-name">${esc(s.name)}</span>
+      <div class="lb-bar-wrap"><div class="lb-bar" style="width:${s.pct}%"></div></div>
+      <span class="lb-score">${s.pct}%</span>
+    </div>`).join('');
+}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  el.querySelectorAll('.fade-up').forEach(e=>{ e.style.animation='none'; void e.offsetWidth; e.style.animation=''; });
+}
+
+function startQuiz(){
+  const val = document.getElementById('student-name').value.trim();
+  if(!val){ document.getElementById('name-error').style.display='block'; return; }
+  document.getElementById('name-error').style.display='none';
+  studentName = val;
+  currentQ=0; score=0; answers=[]; elapsed=0;
+  startTime = Date.now();
+  clearInterval(timerRef);
+  timerRef = setInterval(()=>{ elapsed=Math.floor((Date.now()-startTime)/1000); },500);
+  show('screen-quiz');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const qd = QUESTIONS[currentQ];
+  const total = QUESTIONS.length;
+  document.getElementById('q-counter').textContent = `Question ${currentQ+1} / ${total}`;
+  document.getElementById('score-live').textContent = score;
+  document.getElementById('progress-fill').style.width = `${(currentQ/total)*100}%`;
+  document.getElementById('lesson-tag').textContent = qd.lesson;
+  document.getElementById('q-text').textContent = qd.q;
+
+  const card = document.getElementById('question-card');
+  card.style.animation='none'; void card.offsetWidth; card.style.animation='fadeUp 0.3s ease both';
+
+  const letters = ['A','B','C','D'];
+  document.getElementById('options').innerHTML = qd.opts.map((o,i)=>`
+    <button class="opt" onclick="selectAnswer(${i})" id="opt-${i}">
+      <span class="opt-letter">${letters[i]}</span>
+      <span class="opt-text">${esc(o)}</span>
+    </button>`).join('');
+
+  const fb = document.getElementById('feedback');
+  fb.className='feedback';
+  document.getElementById('next-btn').style.display='none';
+}
+
+function selectAnswer(idx){
+  const qd = QUESTIONS[currentQ];
+  document.querySelectorAll('.opt').forEach(o=>o.disabled=true);
+  const correct = qd.ans;
+  const isCorrect = idx===correct;
+  if(isCorrect){
+    score++;
+    document.getElementById(`opt-${idx}`).classList.add('selected-correct');
+  } else {
+    const wrongEl = document.getElementById(`opt-${idx}`);
+    wrongEl.classList.add('selected-wrong','shake');
+    wrongEl.addEventListener('animationend',()=>wrongEl.classList.remove('shake'),{once:true});
+    document.getElementById(`opt-${correct}`).classList.add('reveal-correct');
+  }
+  answers.push({q:qd.q,chosen:qd.opts[idx],correct:qd.opts[correct],isCorrect,lesson:qd.lesson});
+  document.getElementById('score-live').textContent = score;
+
+  const fb = document.getElementById('feedback');
+  const icon = document.getElementById('fb-icon');
+  const txt = document.getElementById('fb-text');
+  if(isCorrect){
+    fb.className='feedback correct show';
+    icon.innerHTML='<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>';
+    txt.innerHTML='Correct!';
+  } else {
+    fb.className='feedback wrong show';
+    icon.innerHTML='<path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>';
+    txt.innerHTML=`The correct answer is: <strong>${esc(qd.opts[correct])}</strong>`;
+  }
+  document.getElementById('next-btn').style.display='inline-flex';
+}
+
+function nextQuestion(){
+  currentQ++;
+  if(currentQ>=QUESTIONS.length){ endQuiz(); return; }
+  renderQuestion();
+}
+
+function endQuiz(){
+  clearInterval(timerRef);
+  const total=QUESTIONS.length;
+  const pct=Math.round((score/total)*100);
+  saveScore(studentName, pct);
+  document.getElementById('result-name').textContent = studentName;
+  document.getElementById('score-pct').textContent = `${pct}%`;
+  document.getElementById('score-frac').textContent = `${score} out of ${total} correct`;
+  document.getElementById('r-correct').textContent = score;
+  document.getElementById('r-wrong').textContent = total-score;
+  document.getElementById('r-time').textContent = fmtTime(elapsed);
+  document.getElementById('result-emoji').textContent = pct>=80?'🏆':pct>=60?'👍':'📚';
+  document.getElementById('progress-fill').style.width='100%';
+  show('screen-results');
+}
+
+let reviewTab='all';
+function showReview(){
+  reviewTab='all';
+  document.getElementById('tab-all').className='tab active';
+  document.getElementById('tab-wrong').className='tab';
+  document.getElementById('tab-correct').className='tab';
+  renderReview();
+  show('screen-review');
+}
+function setReviewTab(t){
+  reviewTab=t;
+  document.getElementById('tab-all').className=t==='all'?'tab active':'tab';
+  document.getElementById('tab-wrong').className=t==='wrong'?'tab active':'tab';
+  document.getElementById('tab-correct').className=t==='correct'?'tab active':'tab';
+  renderReview();
+}
+function renderReview(){
+  const items = reviewTab==='wrong' ? answers.filter(a=>!a.isCorrect)
+              : reviewTab==='correct' ? answers.filter(a=>a.isCorrect)
+              : answers;
+  const div=document.getElementById('review-list');
+  if(!items.length){ div.innerHTML='<p style="color:var(--text-2);font-size:14px;padding:0.5rem 0;">No items to show.</p>'; return; }
+  div.innerHTML = items.map(a=>`
+    <div class="review-item ${a.isCorrect?'correct':'wrong'} fade-up">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span class="tag ${a.isCorrect?'tag-green':'tag-teal'}" style="${!a.isCorrect?'background:var(--wrong-bg);color:var(--wrong);border-color:var(--wrong-border);':''}">${esc(a.lesson)}</span>
+      </div>
+      <div class="review-q">${esc(a.q)}</div>
+      ${a.isCorrect
+        ? `<div class="review-ans review-correct"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:1px"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>${esc(a.correct)}</span></div>`
+        : `<div class="review-ans review-wrong"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:1px"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg><span>Your answer: ${esc(a.chosen)}</span></div>
+           <div class="review-ans review-correct" style="margin-top:4px;"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:1px"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Correct: ${esc(a.correct)}</span></div>`
+      }
+    </div>`).join('');
+}
+
+function backToResults(){ show('screen-results'); }
+function goHome(){ show('screen-home'); renderLeaderboard(); }
+function retakeQuiz(){
+  currentQ=0; score=0; answers=[]; elapsed=0;
+  startTime=Date.now();
+  clearInterval(timerRef);
+  timerRef=setInterval(()=>{ elapsed=Math.floor((Date.now()-startTime)/1000); },500);
+  show('screen-quiz');
+  renderQuestion();
+}
+
+document.getElementById('student-name').addEventListener('keydown',e=>{ if(e.key==='Enter') startQuiz(); });
+renderLeaderboard();
+</script>
+</body>
+</html>
